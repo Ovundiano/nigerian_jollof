@@ -1,0 +1,80 @@
+:root {
+    --primary-color: #e65c00;
+    --secondary-color: #f9a602;
+    --accent-color: #2c3e50;
+    --text-color: #333;
+    --light-bg: #f8f9fa;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  .navbar {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    padding: 1rem 0;
+  }
+  
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('/static/images/jollof-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 8rem 0;
+    text-align: center;
+  }
+  
+  .recipe-card {
+    transition: transform 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recipe-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .recipe-card img {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .rating-stars {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+  }
+  
+  .comment-section {
+    background: var(--light-bg);
+    padding: 2rem;
+    border-radius: 8px;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+
+  /* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  

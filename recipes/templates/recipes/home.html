@@ -1,0 +1,31 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center py-5 bg-light">
+    <h1 class="display-4">Welcome to Nigerian Jollof</h1>
+    <p class="lead">Discover the authentic taste of Nigerian Jollof rice through our collection of recipes</p>
+    <hr class="my-4">
+    <p>Share your own recipes or explore others' culinary creations</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'recipes:recipe_list' %}" role="button">Browse Recipes</a>
+</div>
+
+<h2 class="mt-5 mb-4">Featured Recipes</h2>
+<div class="row">
+    {% for recipe in featured_recipes %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text">{{ recipe.description|truncatewords:30 }}</p>
+                <a href="{% url 'recipes:recipe_detail' recipe.pk %}" class="btn btn-primary">View Recipe</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
