@@ -4,10 +4,10 @@
   --accent-color: #2c3e50;
   --text-color: #333;
   --light-bg: #f8f9fa;
-  --facebook-color: #3b5998;
-  --twitter-color: #1da1f2;
-  --instagram-color: #e1306c;
-  --youtube-color: #ff0000;
+  --facebook-color: #2d4373;
+  --twitter-color: #1a6b9e;
+  --instagram-color: #c13584;
+  --youtube-color: #cc0000;
   }
   
   body {
@@ -89,10 +89,12 @@
   display: inline-block;
   position: relative;
   margin: 0 15px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .social-links a:hover {
   transform: translateY(-3px);
+  color: #fff;
 }
 
 .social-links a::after {
@@ -134,6 +136,18 @@
 .about-section h5 {
   color: var(--secondary-color);
   margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.about-section p {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.about-section:hover p {
+  color: #fff;
 }
 
 /* About Page Specific Styles */

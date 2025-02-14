@@ -70,12 +70,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'nigerian_jollof.wsgi.application' 
+WSGI_APPLICATION = 'nigerian_jollof.wsgi.application'
 
 # Authentication settings
 LOGIN_REDIRECT_URL = 'recipes:home'
 LOGOUT_REDIRECT_URL = 'recipes:home'
-LOGIN_URL = 'login' 
+LOGIN_URL = 'login'
 
 
 # Database
@@ -124,6 +124,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
