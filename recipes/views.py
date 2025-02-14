@@ -96,5 +96,5 @@ def register(request):
     return render(request, 'recipes/register.html', {'form': form})
 
 
-def about_view(request):
+def about(request):
     return render(request, 'recipes/about.html')
