@@ -98,3 +98,10 @@ def register(request):
 
 def about(request):
     return render(request, 'recipes/about.html')
+
+
+def recipe_detail(request, variety):
+    context = {
+        'variety': variety,
+    }
+    return render(request, 'recipes/recipe_detail.html', context)
