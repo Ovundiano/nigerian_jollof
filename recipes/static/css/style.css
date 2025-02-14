@@ -1,9 +1,13 @@
 :root {
-    --primary-color: #e65c00;
-    --secondary-color: #f9a602;
-    --accent-color: #2c3e50;
-    --text-color: #333;
-    --light-bg: #f8f9fa;
+  --primary-color: #e65c00;
+  --secondary-color: #f9a602;
+  --accent-color: #2c3e50;
+  --text-color: #333;
+  --light-bg: #f8f9fa;
+  --facebook-color: #3b5998;
+  --twitter-color: #1da1f2;
+  --instagram-color: #e1306c;
+  --youtube-color: #ff0000;
   }
   
   body {
@@ -77,4 +81,125 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
+
+  /* Social Media Icons Styling */
+.social-links a {
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
+  margin: 0 15px;
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+}
+
+.social-links a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.social-links a:hover::after {
+  transform: scaleX(1);
+}
+
+.social-links a.facebook:hover { color: var(--facebook-color); }
+.social-links a.twitter:hover { color: var(--twitter-color); }
+.social-links a.instagram:hover { color: var(--instagram-color); }
+.social-links a.youtube:hover { color: var(--youtube-color); }
+
+/* About Section Styling */
+.about-section {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.about-section:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--secondary-color);
+  transform: translateY(-3px);
+}
+
+.about-section h5 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+/* About Page Specific Styles */
+.about-page-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+}
+
+.about-card {
+  background: var(--light-bg);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+}
+
+.contact-info {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.contact-info i {
+  color: var(--secondary-color);
+  margin-right: 10px;
+}
+
+/* Footer Enhancement */
+footer {
+  background: linear-gradient(135deg, var(--accent-color), var(--primary-color)) !important;
+}
+
+footer h5 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+}
+
+.footer-divider {
+  border-color: var(--secondary-color);
+  opacity: 0.2;
+}
+
+/* Newsletter Form Styling */
+.newsletter-form input {
+  border: 2px solid var(--secondary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.newsletter-form .btn {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  transition: all 0.3s ease;
+}
+
+.newsletter-form .btn:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
   
