@@ -1,127 +1,84 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
 
-{% block title %}All Recipes{% endblock %}
+{% block title %}Jollof Varieties{% endblock %}
 
 {% block content %}
-<div class="container">
-    <!-- Featured Categories Section -->
-    <div class="mb-5">
-        <h2 class="text-center mb-4">Browse by Category</h2>
-        <div class="row justify-content-center">
-            <div class="col-md-2 col-sm-4 mb-3 text-center">
-                <div class="category-card p-3 bg-light rounded">
-                    <i class="fas fa-fire fa-2x text-danger mb-2"></i>
-                    <h6>Main Dishes</h6>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-4 mb-3 text-center">
-                <div class="category-card p-3 bg-light rounded">
-                    <i class="fas fa-cookie fa-2x text-warning mb-2"></i>
-                    <h6>Snacks</h6>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-4 mb-3 text-center">
-                <div class="category-card p-3 bg-light rounded">
-                    <i class="fas fa-glass-cheers fa-2x text-success mb-2"></i>
-                    <h6>Drinks</h6>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-4 mb-3 text-center">
-                <div class="category-card p-3 bg-light rounded">
-                    <i class="fas fa-carrot fa-2x text-primary mb-2"></i>
-                    <h6>Soups</h6>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recipe List Section -->
-    <h1 class="text-center mb-4">All Recipes</h1>
+<div class="jollof-varieties">
+    <h1 class="text-center mb-5">Explore Nigerian Jollof Varieties</h1>
     
-    <!-- Search and Filter Bar -->
-    <div class="row mb-4">
-        <div class="col-md-8 offset-md-2">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search recipes...">
-                <select class="form-select" style="max-width: 200px;">
-                    <option selected>Sort by</option>
-                    <option>Most Recent</option>
-                    <option>Most Popular</option>
-                    <option>Cooking Time</option>
-                </select>
-                <button class="btn btn-primary" type="button">Search</button>
+    <div class="row g-4">
+        <!-- Smoky Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/smoky-jollof.jpg' %}" class="card-img-top" alt="Smoky Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Smoky Jollof</h3>
+                    <p class="card-text">The signature smoky flavor that Nigerian Jollof is famous for, achieved through slow-cooking and careful heat control.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='smoky' %}" class="btn btn-primary">View Recipes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firewood Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/firewood-jollof.jpg' %}" class="card-img-top" alt="Firewood Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Firewood Jollof</h3>
+                    <p class="card-text">Traditional firewood-cooked Jollof, infused with an authentic woody aroma and deep, rich flavors.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='firewood' %}" class="btn btn-primary">View Recipes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Party Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/party-jollof.jpg' %}" class="card-img-top" alt="Party Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Party Jollof</h3>
+                    <p class="card-text">The celebratory version of Jollof rice, cooked in large quantities with extra spices and seasonings.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='party' %}" class="btn btn-primary">View Recipes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Native Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/native-jollof.jpg' %}" class="card-img-top" alt="Native Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Native Jollof</h3>
+                    <p class="card-text">Traditional village-style Jollof rice, prepared with local ingredients and time-honored techniques.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='native' %}" class="btn btn-primary">View Recipes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/quick-jollof.jpg' %}" class="card-img-top" alt="Quick Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Quick Jollof</h3>
+                    <p class="card-text">A faster version that doesn't compromise on taste, perfect for busy weekdays.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='quick' %}" class="btn btn-primary">View Recipes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coconut Jollof -->
+        <div class="col-md-4">
+            <div class="card h-100 jollof-card">
+                <img src="{% static 'recipes/img/coconut-jollof.jpg' %}" class="card-img-top" alt="Coconut Jollof Rice">
+                <div class="card-body">
+                    <h3 class="card-title">Coconut Jollof</h3>
+                    <p class="card-text">A unique twist on traditional Jollof, cooked with coconut milk for added richness and flavor.</p>
+                    <a href="{% url 'recipes:recipe_detail' variety='coconut' %}" class="btn btn-primary">View Recipes</a>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Recipe Grid -->
-    <div class="row">
-        {% for recipe in recipes %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    {% if recipe.image %}
-                        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="height: 200px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-light text-center py-5">
-                            <i class="fas fa-utensils fa-3x text-muted"></i>
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ recipe.title }}</h5>
-                        <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="recipe-info">
-                                <small class="text-muted">
-                                    <i class="far fa-clock"></i> {{ recipe.cooking_time }} mins
-                                </small>
-                                <small class="text-muted ms-2">
-                                    <i class="fas fa-user"></i> {{ recipe.servings }} servings
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <a href="{% url 'recipes:recipe_detail' recipe.pk %}" class="btn btn-outline-primary w-100">View Recipe</a>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
-                <h3>No Recipes Yet</h3>
-                <p class="text-muted">Be the first to add a recipe!</p>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'recipes:recipe_create' %}" class="btn btn-primary">Add Recipe</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-primary">Login to Add Recipe</a>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
-
-    <!-- Pagination -->
-    {% if is_paginated %}
-        <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    </li>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
 </div>
 {% endblock %}
