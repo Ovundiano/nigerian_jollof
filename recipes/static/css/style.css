@@ -21,87 +21,100 @@ body {
   padding: 1rem 0;
 }
   
-  .navbar-brand {
-    font-size: 1.8rem;
-    font-weight: 700;
-  }
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
 
-  .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                url('/static/images/jollof-hero.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 8rem 0;
-    text-align: center;
-  }
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+              url('/static/images/jollof-hero.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 8rem 0;
+  text-align: center;
+}
   
-  .recipe-card {
-    transition: transform 0.3s ease;
-    border: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+.recipe-card {
+  transition: transform 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
   
-  .recipe-card:hover {
-    transform: translateY(-5px);
-  }
+.recipe-card:hover {
+  transform: translateY(-5px);
+}
   
-  .recipe-card img {
-    height: 200px;
-    object-fit: cover;
-  }
+.recipe-card img {
+  height: 200px;
+  object-fit: cover;
+}
   
-  .rating-stars {
-    color: var(--secondary-color);
-    font-size: 1.2rem;
-  }
+.rating-stars {
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
   
-  .comment-section {
-    background: var(--light-bg);
-    padding: 2rem;
-    border-radius: 8px;
-  }
+.comment-section {
+  background: var(--light-bg);
+  padding: 2rem;
+  border-radius: 8px;
+}
 
-  .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
   
-  .btn-primary:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-  }
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
 
   /* Animation classes */
 .fade-in {
     animation: fadeIn 0.5s ease-in;
-  }
+}
   
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
   /* Social Media Icons Styling */
-  .social-links a {
-    margin-right: 15px;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    color: rgba(255, 255, 255, 0.9) !important;
-    display: inline-block;
-  }
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.social-links a {
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
   
-  .social-links a:hover {
-    color: #fff !important;
-    transform: translateY(-2px);
-  }
+.social-links a:hover {
+  color: #fff !important;
+  transform: translateY(-3px);
+}
 
 .social-links a::after {
   content: '';
   position: absolute;
   width: 100%;
   height: 2px;
-  bottom: -5px;
+  bottom: 0;
   left: 0;
   background-color: currentColor;
   transform: scaleX(0);
@@ -112,16 +125,17 @@ body {
   transform: scaleX(1);
 }
 
-.social-links a.facebook:hover { color: var(--facebook-color); }
-.social-links a.twitter:hover { color: var(--twitter-color); }
-.social-links a.instagram:hover { color: var(--instagram-color); }
-.social-links a.youtube:hover { color: var(--youtube-color); }
+.social-links a.facebook:hover { color: var(--facebook-color) !important; }
+.social-links a.twitter:hover { color: var(--twitter-color) !important; }
+.social-links a.instagram:hover { color: var(--instagram-color) !important; }
+.social-links a.youtube:hover { color: var(--youtube-color) !important; }
 
 /* About Section Styling */
 .about-section {
-  cursor: pointer;
   transition: all 0.3s ease;
-  padding: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .about-section:hover {
@@ -129,12 +143,10 @@ body {
 }
 
 .about-section h5 {
-  color: var(--secondary-color);
   margin-bottom: 1rem;
 }
 
 .about-section p {
-  color: #fff !important;
   opacity: 0.9;
 }
 
@@ -224,6 +236,7 @@ body {
 footer {
   background-color: #343a40;
   color: white;
+  padding: 3rem 0 2rem;
 }
 
 footer h5 {
@@ -237,6 +250,11 @@ footer h5 {
 }
 
 /* Newsletter Form Styling */
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .newsletter-form input {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -267,5 +285,21 @@ footer h5 {
 /* Override Bootstrap's text-muted in footer */
 footer .text-muted {
   color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .social-links {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .newsletter-form {
+    flex-direction: column;
+  }
+  
+  .newsletter-form .btn {
+    width: 100%;
+  }
 }
   
