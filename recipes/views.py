@@ -94,3 +94,7 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'recipes/register.html', {'form': form})
+
+
+def about_view(request):
+    return render(request, 'recipes/about.html')
