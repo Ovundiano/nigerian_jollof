@@ -40,7 +40,16 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, 'Recipe created successfully!')
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'Please correct the errors below.')
+            return self.form_invalid(form)
 
 
 @login_required

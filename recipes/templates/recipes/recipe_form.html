@@ -1,0 +1,86 @@
+{% extends 'recipes/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Add Recipe{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Add New Recipe</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                        {{ form.title|add_class:"form-control" }}
+                        {{ form.title.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                        {{ form.description|add_class:"form-control" }}
+                        {{ form.description.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.ingredients.id_for_label }}" class="form-label">Ingredients</label>
+                        {{ form.ingredients|add_class:"form-control" }}
+                        {{ form.ingredients.errors }}
+                        <small class="text-muted">List ingredients line by line</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.instructions.id_for_label }}" class="form-label">Instructions</label>
+                        {{ form.instructions|add_class:"form-control" }}
+                        {{ form.instructions.errors }}
+                        <small class="text-muted">Write step-by-step instructions</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.cooking_time.id_for_label }}" class="form-label">Cooking Time (minutes)</label>
+                            {{ form.cooking_time|add_class:"form-control" }}
+                            {{ form.cooking_time.errors }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.servings.id_for_label }}" class="form-label">Servings</label>
+                            {{ form.servings|add_class:"form-control" }}
+                            {{ form.servings.errors }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+                        {{ form.category|add_class:"form-control" }}
+                        {{ form.category.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+                        {{ form.image|add_class:"form-control" }}
+                        {{ form.image.errors }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Create Recipe</button>
+                        <a href="{% url 'recipes:recipe_list' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
