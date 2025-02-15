@@ -152,6 +152,103 @@ def variety_detail(request, variety):
                 'Allow smoke to infuse flavor'
             ]
         },
+        'party': {
+            'title': 'Party Jollof',
+            'description': 'The celebratory version served at Nigerian parties and gatherings.',
+            'cooking_time': '2 hours 30 minutes',
+            'difficulty': 'Medium',
+            'ingredients': [
+                '5 cups long-grain rice',
+                '8 large tomatoes',
+                '4 red bell peppers',
+                '3-4 scotch bonnet peppers',
+                'Vegetable oil',
+                'Chicken stock',
+                'Bay leaves',
+                'Thyme, curry powder, and other seasonings'
+            ],
+            'instructions': [
+                'Prepare large pot or dutch oven',
+                'Blend tomatoes, peppers, and onions',
+                'Fry blended mixture until reduced by half',
+                'Parboil rice and rinse thoroughly',
+                'Layer seasoned sauce and rice',
+                'Cover tightly and cook on low heat',
+                'Let rest before serving to large crowd'
+            ]
+        },
+        'native': {
+            'title': 'Native Jollof',
+            'description': 'Traditional village-style preparation with local ingredients.',
+            'cooking_time': '2 hours',
+            'difficulty': 'Medium-Hard',
+            'ingredients': [
+                '3 cups local rice (not parboiled)',
+                'Fresh tomatoes and peppers',
+                'Palm oil',
+                'Locust beans (iru)',
+                'Smoked fish or dried crayfish',
+                'Native spices and herbs'
+            ],
+            'instructions': [
+                'Prepare traditional clay pot if available',
+                'Pound or grind fresh tomatoes and peppers',
+                'Heat palm oil in pot until clear',
+                'Add blended mixture and cook until raw smell disappears',
+                'Add cleaned rice without parboiling',
+                'Add traditional seasonings and smoked ingredients',
+                'Cook on wood fire if possible for authentic taste'
+            ]
+        },
+        'quick': {
+            'title': 'Quick Jollof',
+            'description': 'A faster preparation that maintains authentic flavor.',
+            'cooking_time': '45 minutes',
+            'difficulty': 'Easy',
+            'ingredients': [
+                '2 cups parboiled rice',
+                '1 can tomato paste',
+                '1 onion, chopped',
+                '1 bell pepper, chopped',
+                '1-2 scotch bonnet peppers (to taste)',
+                'Vegetable oil',
+                'Stock cube and seasonings'
+            ],
+            'instructions': [
+                'Heat oil and sauté onions',
+                'Add tomato paste and fry for 2-3 minutes',
+                'Add chopped peppers and seasonings',
+                'Pour in 2.5 cups of water or stock',
+                'Add rice and stir well',
+                'Cover and cook on medium-low heat for 25-30 minutes',
+                'Let rest for 5 minutes before serving'
+            ]
+        },
+        'coconut': {
+            'title': 'Coconut Jollof',
+            'description': 'A coastal twist with coconut milk adding richness and depth.',
+            'cooking_time': '1 hour 15 minutes',
+            'difficulty': 'Medium',
+            'ingredients': [
+                '2 cups long-grain rice',
+                '1 can coconut milk',
+                '3 large tomatoes',
+                '2 red bell peppers',
+                '1-2 scotch bonnet peppers',
+                'Coconut oil',
+                'Fresh thyme and bay leaves',
+                'Stock cube and seasonings'
+            ],
+            'instructions': [
+                'Blend tomatoes, peppers, and onions',
+                'Heat coconut oil and fry blended mixture',
+                'Add coconut milk and bring to simmer',
+                'Add washed rice and additional water if needed',
+                'Add herbs and seasonings',
+                'Cover and cook on low heat until rice is tender',
+                'Garnish with fresh herbs or toasted coconut flakes'
+            ]
+        }
     }
 
     variety_data = varieties_info.get(variety)
