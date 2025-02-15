@@ -13,5 +13,5 @@ urlpatterns = [
     path('recipe/<int:pk>/rate/', views.add_rating, name='add_rating'),
     path('register/', views.register, name='register'),
     path('varieties/', views.jollof_varieties, name='jollof_varieties'),
-    path('variety/<str:variety>/', views.variety_detail, name='variety_detail'),
+    path('varieties/<str:variety>/', views.variety_detail, name='variety_detail'),
 ]

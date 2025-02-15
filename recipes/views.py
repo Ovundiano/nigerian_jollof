@@ -112,27 +112,56 @@ def jollof_varieties(request):
 
 
 def variety_detail(request, variety):
-    variety_details = {
+    varieties_info = {
         'smoky': {
             'title': 'Smoky Jollof',
             'description': 'The signature smoky flavor that Nigerian Jollof is famous for.',
             'cooking_time': '1 hour 30 minutes',
             'difficulty': 'Medium',
+            'ingredients': [
+                '2 cups long-grain rice',
+                '4 large tomatoes',
+                '2 red bell peppers',
+                '2 scotch bonnet peppers',
+                'Vegetable oil',
+                'Seasonings and spices'
+            ],
+            'instructions': [
+                'Blend tomatoes, peppers, and onions',
+                'Parboil rice and rinse',
+                'Cook tomato sauce until reduced',
+                'Combine rice and sauce',
+                'Cook on low heat for smoky flavor'
+            ]
         },
         'firewood': {
             'title': 'Firewood Jollof',
             'description': 'Traditional firewood-cooked Jollof with authentic woody aroma.',
             'cooking_time': '2 hours',
             'difficulty': 'Hard',
-        },
-        'party': {
-            'title': 'Party Jollof',
-            'description': 'The celebratory version of Jollof rice.',
-            'cooking_time': '2 hours',
-            'difficulty': 'Medium',
+            'ingredients': [
+                '3 cups long-grain rice',
+                '6 large tomatoes',
+                '3 red bell peppers',
+                '3 scotch bonnet peppers',
+                'Palm oil',
+                'Traditional seasonings'
+            ],
+            'instructions': [
+                'Prepare firewood or charcoal',
+                'Blend ingredients for sauce',
+                'Cook sauce in cast iron pot',
+                'Add rice and cook slowly',
+                'Allow smoke to infuse flavor'
+            ]
         },
     }
 
-    context = variety_details.get(variety, {})
-    context['variety'] = variety
-    return render(request, 'recipes/recipe_detail.html', context)
+    variety_data = varieties_info.get(variety)
+    if not variety_data:
+        return redirect('recipes:jollof_varieties')
+
+    return render(request, 'recipes/recipe_detail.html', {
+        'variety': variety,
+        'recipe': variety_data
+    })
