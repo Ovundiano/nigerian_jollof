@@ -15,10 +15,14 @@ def home(request):
 
 class RecipeListView(ListView):
     model = Recipe
-    template_name = 'recipes/recipe_list.html'
+    template_name = 'recipes/database_recipes.html'  # Use the new template
     context_object_name = 'recipes'
     ordering = ['-created_at']
     paginate_by = 6
+
+
+def jollof_varieties(request):
+    return render(request, 'recipes/recipe_list.html')  # Keep using the existing template
 
 
 class RecipeDetailView(DetailView):
@@ -98,13 +102,6 @@ def register(request):
 
 def about(request):
     return render(request, 'recipes/about.html')
-
-
-def recipe_detail(request, variety):
-    context = {
-        'variety': variety,
-    }
-    return render(request, 'recipes/recipe_detail.html', context)
 
 
 def jollof_varieties(request):

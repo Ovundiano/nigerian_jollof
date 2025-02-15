@@ -1,0 +1,70 @@
+{% extends 'recipes/base.html' %}
+{% load static %}
+
+{% block title %}All Recipes{% endblock %}
+
+{% block content %}
+<div class="recipes-container">
+  <h1 class="text-center mb-5">Browse All Recipes</h1>
+  
+  <div class="row g-4">
+    {% for recipe in recipes %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        {% if recipe.image %}
+          <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+        {% else %}
+          <img src="{% static 'recipes/img/default-recipe.jpg' %}" class="card-img-top" alt="Default Recipe Image">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.title }}</h5>
+          <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+          <a href="{% url 'recipes:recipe_detail' pk=recipe.pk %}" class="btn btn-primary">View Recipe</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <p class="text-center">No recipes found. <a href="{% url 'recipes:recipe_create' %}">Add one now!</a></p>
+    </div>
+    {% endfor %}
+  </div>
+  
+  {% if is_paginated %}
+    <!-- Pagination controls -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center mt-4">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; First</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item active">
+              <span class="page-link">{{ num }}</span>
+            </li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+</div>
+{% endblock %}
