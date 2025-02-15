@@ -105,3 +105,34 @@ def recipe_detail(request, variety):
         'variety': variety,
     }
     return render(request, 'recipes/recipe_detail.html', context)
+
+
+def jollof_varieties(request):
+    return render(request, 'recipes/recipe_list.html')
+
+
+def variety_detail(request, variety):
+    variety_details = {
+        'smoky': {
+            'title': 'Smoky Jollof',
+            'description': 'The signature smoky flavor that Nigerian Jollof is famous for.',
+            'cooking_time': '1 hour 30 minutes',
+            'difficulty': 'Medium',
+        },
+        'firewood': {
+            'title': 'Firewood Jollof',
+            'description': 'Traditional firewood-cooked Jollof with authentic woody aroma.',
+            'cooking_time': '2 hours',
+            'difficulty': 'Hard',
+        },
+        'party': {
+            'title': 'Party Jollof',
+            'description': 'The celebratory version of Jollof rice.',
+            'cooking_time': '2 hours',
+            'difficulty': 'Medium',
+        },
+    }
+
+    context = variety_details.get(variety, {})
+    context['variety'] = variety
+    return render(request, 'recipes/recipe_detail.html', context)
