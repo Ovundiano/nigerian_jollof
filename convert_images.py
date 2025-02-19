@@ -23,7 +23,7 @@ class JollofImageOrganizer:
         # Define directories
         self.directories = {
             'svg': os.path.join(self.static_path, 'img', 'svg'),
-            'jpg': os.path.join(self.static_path, 'img', 'jpg'),
+            'jpg': os.path.join(self.static_path, 'img'),
             'thumbnails': os.path.join(self.static_path, 'img', 'thumbnails'),
             'webp': os.path.join(self.static_path, 'img', 'webp'),
             'originals': os.path.join(self.static_path, 'img', 'originals')

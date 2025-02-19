@@ -255,7 +255,7 @@ def variety_detail(request, variety):
     if not variety_data:
         return redirect('recipes:jollof_varieties')
 
-    return render(request, 'recipes/recipe_detail.html', {
+    return render(request, 'recipes/variety_detail.html', {
         'variety': variety,
         'recipe': variety_data
     })
