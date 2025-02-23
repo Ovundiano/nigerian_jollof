@@ -48,6 +48,12 @@ class CommentForm(forms.ModelForm):
 
 
 class RatingForm(forms.ModelForm):
+    value = forms.ChoiceField(
+        choices=[(i, f"{'★' * i}{'☆' * (5-i)}") for i in range(1, 6)],
+        widget=forms.RadioSelect(attrs={'class': 'rating-input'}),
+        label='Rate this recipe'
+    )
+
     class Meta:
         model = Rating
         fields = ['value']
