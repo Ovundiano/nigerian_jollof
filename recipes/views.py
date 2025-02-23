@@ -348,3 +348,35 @@ def delete_comment(request, comment_id):
     return render(request, 'recipes/delete_comment_confirm.html', {
         'comment': comment
     })
+
+
+class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Recipe
+    form_class = RecipeForm
+    template_name = 'recipes/recipe_form.html'
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.success(self.request, 'Recipe updated successfully!')
+        return super().form_valid(form)
+    
+    def test_func(self):
+        recipe = self.get_object()
+        return self.request.user == recipe.author
+    
+    def get_success_url(self):
+        return reverse_lazy('recipes:recipe_detail', kwargs={'pk': self.object.pk})
+
+
+class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('recipes:recipe_list')
+    template_name = 'recipes/recipe_confirm_delete.html'
+    
+    def test_func(self):
+        recipe = self.get_object()
+        return self.request.user == recipe.author
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Recipe deleted successfully!')
+        return super().delete(request, *args, **kwargs)
