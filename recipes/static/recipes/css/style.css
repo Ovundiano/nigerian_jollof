@@ -387,6 +387,24 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
   }
+
+  /* Comment style */
+  .btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+  }
   
   /* Responsive adjustments */
   @media (max-width: 768px) {
