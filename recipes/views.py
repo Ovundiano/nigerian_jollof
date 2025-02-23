@@ -354,7 +354,7 @@ def delete_comment(request, comment_id):
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
-    template_name = 'recipes/recipe_edit.html'  # Change this line to use the new template
+    template_name = 'recipes/recipe_edit.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user

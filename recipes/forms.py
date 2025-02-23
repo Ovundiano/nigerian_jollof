@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Recipe, Comment, Rating, Category  # Add Category import
+from .models import Recipe, Comment, Rating, Category
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -32,10 +32,10 @@ class RecipeForm(forms.ModelForm):
         }
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.all()
-        self.fields['category'].empty_label = "Select a category"
+def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.fields['category'].queryset = Category.objects.all()
+    self.fields['category'].empty_label = "Select a category"
 
 
 class CommentForm(forms.ModelForm):
