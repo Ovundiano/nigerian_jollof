@@ -22,7 +22,7 @@ class RecipeListView(ListView):
 
 
 def jollof_varieties(request):
-    return render(request, 'recipes/recipe_list.html')  # Keep using the existing template
+    return render(request, 'recipes/recipe_list.html')
 
 
 class RecipeDetailView(DetailView):
@@ -31,9 +31,45 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user_rating = None
+        if self.request.user.is_authenticated:
+            user_rating = self.object.ratings.filter(user=self.request.user).first()
+
         context['comment_form'] = CommentForm()
-        context['rating_form'] = RatingForm()
+        context['rating_form'] = RatingForm(initial={'value': user_rating.value if user_rating else None})
+        context['user_rating'] = user_rating
+        context['comments'] = self.object.comment_set.all().order_by('-created_at')
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please log in to comment or rate.')
+            return redirect('login')
+
+        if 'submit_comment' in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.recipe = self.object
+                comment.user = request.user
+                comment.save()
+                messages.success(request, 'Comment added successfully!')
+
+        if 'submit_rating' in request.POST:
+            rating_form = RatingForm(request.POST)
+            if rating_form.is_valid():
+                rating, created = Rating.objects.get_or_create(
+                    recipe=self.object,
+                    user=request.user,
+                    defaults={'value': rating_form.cleaned_data['value']}
+                )
+                if not created:
+                    rating.value = rating_form.cleaned_data['value']
+                    rating.save()
+                messages.success(request, 'Rating updated successfully!')
+
+        return redirect('recipes:recipe_detail', pk=self.object.pk)
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
