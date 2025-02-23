@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Recipe, Comment, Rating
+from .models import Recipe, Comment, Rating, Category  # Add Category import
+
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
@@ -9,6 +10,7 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
 
 class RecipeForm(forms.ModelForm):
     class Meta:
@@ -29,6 +31,13 @@ class RecipeForm(forms.ModelForm):
             'instructions': forms.Textarea(attrs={'rows': 5}),
         }
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.all()
+        self.fields['category'].empty_label = "Select a category"  # Optional: adds a default empty option
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -36,6 +45,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3})
         }
+
 
 class RatingForm(forms.ModelForm):
     class Meta:
