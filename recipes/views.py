@@ -32,6 +32,7 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(f"User: {self.request.user}, Author: {self.object.author}")
         # Initialize forms
         context['comment_form'] = CommentForm()
         context['rating_form'] = RatingForm()
@@ -353,17 +354,17 @@ def delete_comment(request, comment_id):
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
-    template_name = 'recipes/recipe_form.html'
-    
+    template_name = 'recipes/recipe_edit.html'  # Change this line to use the new template
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         messages.success(self.request, 'Recipe updated successfully!')
         return super().form_valid(form)
-    
+
     def test_func(self):
         recipe = self.get_object()
         return self.request.user == recipe.author
-    
+
     def get_success_url(self):
         return reverse_lazy('recipes:recipe_detail', kwargs={'pk': self.object.pk})
 
@@ -372,11 +373,11 @@ class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
     success_url = reverse_lazy('recipes:recipe_list')
     template_name = 'recipes/recipe_confirm_delete.html'
-    
+
     def test_func(self):
         recipe = self.get_object()
         return self.request.user == recipe.author
-    
+
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Recipe deleted successfully!')
         return super().delete(request, *args, **kwargs)
