@@ -35,7 +35,7 @@ class RecipeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.all()
-        self.fields['category'].empty_label = "Select a category"  # Optional: adds a default empty option
+        self.fields['category'].empty_label = "Select a category"
 
 
 class CommentForm(forms.ModelForm):
