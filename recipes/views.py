@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Recipe, Comment, Rating
 from .forms import RecipeForm, CommentForm, RatingForm, UserRegistrationForm
+from django.http import HttpResponseForbidden
 
 
 def home(request):
@@ -304,4 +305,46 @@ def variety_detail(request, variety):
     return render(request, 'recipes/variety_detail.html', {
         'variety': variety,
         'recipe': variety_data
+    })
+
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Check if the user is the comment author
+    if comment.user != request.user:
+        return HttpResponseForbidden("You cannot edit this comment.")
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Comment updated successfully!')
+            return redirect('recipes:recipe_detail', pk=comment.recipe.pk)
+    else:
+        form = CommentForm(instance=comment)
+
+    return render(request, 'recipes/edit_comment.html', {
+        'form': form,
+        'comment': comment
+    })
+
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Check if the user is the comment author
+    if comment.user != request.user:
+        return HttpResponseForbidden("You cannot delete this comment.")
+
+    recipe_id = comment.recipe.id
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Comment deleted successfully!')
+        return redirect('recipes:recipe_detail', pk=recipe_id)
+
+    return render(request, 'recipes/delete_comment_confirm.html', {
+        'comment': comment
     })
