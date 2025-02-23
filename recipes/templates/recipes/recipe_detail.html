@@ -74,6 +74,19 @@
                         <strong>{{ comment.user.username }}</strong>
                         <small class="text-muted">{{ comment.created_at|date:"F d, Y" }}</small>
                         <p class="mt-2">{{ comment.content }}</p>
+        
+                        {% if user == comment.user %}
+                            <div class="btn-group btn-group-sm mb-2">
+                                <a href="{% url 'recipes:edit_comment' comment.id %}" 
+                                    class="btn btn-outline-primary">
+                                    Edit
+                                </a>
+                                <a href="{% url 'recipes:delete_comment' comment.id %}" 
+                                    class="btn btn-outline-danger">
+                                    Delete
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% empty %}
                     <p class="text-muted">No comments yet.</p>
