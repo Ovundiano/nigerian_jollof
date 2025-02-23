@@ -31,23 +31,32 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_rating = None
-        if self.request.user.is_authenticated:
-            user_rating = self.object.ratings.filter(user=self.request.user).first()
-
+        # Initialize forms
         context['comment_form'] = CommentForm()
-        context['rating_form'] = RatingForm(initial={'value': user_rating.value if user_rating else None})
-        context['user_rating'] = user_rating
+        context['rating_form'] = RatingForm()
+
+        # Get existing rating for the user if logged in
+        if self.request.user.is_authenticated:
+            existing_rating = Rating.objects.filter(
+                recipe=self.object,
+                user=self.request.user
+            ).first()
+            if existing_rating:
+                context['rating_form'] = RatingForm(initial={'value': existing_rating.value})
+
+        # Get comments ordered by most recent
         context['comments'] = self.object.comment_set.all().order_by('-created_at')
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+
         if not request.user.is_authenticated:
             messages.error(request, 'Please log in to comment or rate.')
             return redirect('login')
 
-        if 'submit_comment' in request.POST:
+        # Handle comment submission
+        if 'content' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
@@ -56,7 +65,8 @@ class RecipeDetailView(DetailView):
                 comment.save()
                 messages.success(request, 'Comment added successfully!')
 
-        if 'submit_rating' in request.POST:
+        # Handle rating submission
+        if 'value' in request.POST:
             rating_form = RatingForm(request.POST)
             if rating_form.is_valid():
                 rating, created = Rating.objects.get_or_create(

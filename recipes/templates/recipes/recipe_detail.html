@@ -38,10 +38,12 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h4>Rate this Recipe</h4>
-                    <form method="post" action="{% url 'recipes:add_rating' recipe.pk %}">
+                    <form method="post">
                         {% csrf_token %}
-                        {{ rating_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                        <div class="rating-container">
+                            {{ rating_form.value }}
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submit Rating</button>
                     </form>
                 </div>
             </div>
@@ -49,26 +51,32 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h4>Add a Comment</h4>
-                    <form method="post" action="{% url 'recipes:add_comment' recipe.pk %}">
+                    <form method="post">
                         {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Submit Comment</button>
+                        <div class="form-group">
+                            {{ comment_form.content }}
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
                     </form>
                 </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Please <a href="{% url 'login' %}">login</a> to rate and comment on recipes.
             </div>
         {% endif %}
 
         <div class="card">
             <div class="card-body">
                 <h4>Comments</h4>
-                {% for comment in recipe.comment_set.all %}
-                    <div class="mb-3">
+                {% for comment in comments %}
+                    <div class="mb-3 border-bottom pb-2">
                         <strong>{{ comment.user.username }}</strong>
                         <small class="text-muted">{{ comment.created_at|date:"F d, Y" }}</small>
-                        <p>{{ comment.content }}</p>
+                        <p class="mt-2">{{ comment.content }}</p>
                     </div>
                 {% empty %}
-                    <p>No comments yet.</p>
+                    <p class="text-muted">No comments yet.</p>
                 {% endfor %}
             </div>
         </div>
