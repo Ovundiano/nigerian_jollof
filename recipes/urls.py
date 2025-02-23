@@ -12,4 +12,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('varieties/', views.jollof_varieties, name='jollof_varieties'),
     path('varieties/<str:variety>/', views.variety_detail, name='variety_detail'),
+    path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
 ]
