@@ -30,7 +30,7 @@ class Recipe(models.Model):
         return self.title
 
     def average_rating(self):
-        ratings = self.rating_set.all()
+        ratings = self.ratings.all()
         if ratings:
             return sum([rating.value for rating in ratings]) / len(ratings)
         return 0
