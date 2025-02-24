@@ -51,7 +51,34 @@
                     <form method="post">
                         {% csrf_token %}
                         <div class="rating-container">
-                            {{ rating_form.value }}
+                            <div class="rating-input">
+                            <!-- Replace the original rating form with this structure -->
+                                <div class="rating-option">
+                                    <label for="id_value_1">★</label>
+                                    <input type="radio" name="value" value="1" id="id_value_1">
+                                    <span class="rating-text">Poor</span>
+                                </div>
+                                <div class="rating-option">
+                                    <label for="id_value_2">★</label>
+                                    <input type="radio" name="value" value="2" id="id_value_2">
+                                    <span class="rating-text">Fair</span>
+                                </div>
+                                <div class="rating-option">
+                                    <label for="id_value_3">★</label>
+                                    <input type="radio" name="value" value="3" id="id_value_3">
+                                    <span class="rating-text">Good</span>
+                                </div>
+                                <div class="rating-option">
+                                    <label for="id_value_4">★</label>
+                                    <input type="radio" name="value" value="4" id="id_value_4">
+                                    <span class="rating-text">Very Good</span>
+                                </div>
+                                <div class="rating-option">
+                                    <label for="id_value_5">★</label>
+                                    <input type="radio" name="value" value="5" id="id_value_5">
+                                    <span class="rating-text">Excellent</span>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Submit Rating</button>
                     </form>
