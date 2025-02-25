@@ -1,0 +1,1 @@
+web: gunicorn nigerian_jollof.wsgi --log-file -
