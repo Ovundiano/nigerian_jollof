@@ -32,7 +32,7 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(f"User: {self.request.user}, Author: {self.object.author}")
+
         # Initialize forms
         context['comment_form'] = CommentForm()
         context['rating_form'] = RatingForm()
@@ -45,6 +45,8 @@ class RecipeDetailView(DetailView):
             ).first()
             if existing_rating:
                 context['rating_form'] = RatingForm(initial={'value': existing_rating.value})
+                # Set the initial value to pre-select the radio button
+                context['user_rating'] = existing_rating.value
 
         # Get comments ordered by most recent
         context['comments'] = self.object.comment_set.all().order_by('-created_at')
@@ -57,8 +59,31 @@ class RecipeDetailView(DetailView):
             messages.error(request, 'Please log in to comment or rate.')
             return redirect('login')
 
-        # Handle comment submission
-        if 'content' in request.POST:
+        # Handle form submission based on the form_type hidden field
+        form_type = request.POST.get('form_type', '')
+
+        # Handle rating submission
+        if form_type == 'rating_form' and 'value' in request.POST:
+            rating_value = request.POST.get('value')
+            try:
+                rating_value = int(rating_value)
+                if 1 <= rating_value <= 5:  # Validate rating range
+                    rating, created = Rating.objects.get_or_create(
+                        recipe=self.object,
+                        user=request.user,
+                        defaults={'value': rating_value}
+                    )
+                    if not created:
+                        rating.value = rating_value
+                        rating.save()
+                    messages.success(request, 'Rating updated successfully!')
+                else:
+                    messages.error(request, 'Invalid rating value. Please select between 1 and 5 stars.')
+            except ValueError:
+                messages.error(request, 'Invalid rating value.')
+
+        # Handle comment submission (no form_type or content check)
+        elif 'content' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
@@ -66,20 +91,8 @@ class RecipeDetailView(DetailView):
                 comment.user = request.user
                 comment.save()
                 messages.success(request, 'Comment added successfully!')
-
-        # Handle rating submission
-        if 'value' in request.POST:
-            rating_form = RatingForm(request.POST)
-            if rating_form.is_valid():
-                rating, created = Rating.objects.get_or_create(
-                    recipe=self.object,
-                    user=request.user,
-                    defaults={'value': rating_form.cleaned_data['value']}
-                )
-                if not created:
-                    rating.value = rating_form.cleaned_data['value']
-                    rating.save()
-                messages.success(request, 'Rating updated successfully!')
+            else:
+                messages.error(request, 'Error adding comment. Please try again.')
 
         return redirect('recipes:recipe_detail', pk=self.object.pk)
 
@@ -122,17 +135,23 @@ def add_comment(request, pk):
 def add_rating(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     if request.method == 'POST':
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            rating, created = Rating.objects.get_or_create(
-                recipe=recipe,
-                user=request.user,
-                defaults={'value': form.cleaned_data['value']}
-            )
-            if not created:
-                rating.value = form.cleaned_data['value']
-                rating.save()
-            messages.success(request, 'Rating added successfully!')
+        rating_value = request.POST.get('value')
+        try:
+            rating_value = int(rating_value)
+            if 1 <= rating_value <= 5:  # Validate rating range
+                rating, created = Rating.objects.get_or_create(
+                    recipe=recipe,
+                    user=request.user,
+                    defaults={'value': rating_value}
+                )
+                if not created:
+                    rating.value = rating_value
+                    rating.save()
+                messages.success(request, 'Rating added successfully!')
+            else:
+                messages.error(request, 'Invalid rating value. Please select between 1 and 5 stars.')
+        except ValueError:
+            messages.error(request, 'Invalid rating value.')
     return redirect('recipes:recipe_detail', pk=pk)
 
 

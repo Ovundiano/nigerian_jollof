@@ -364,49 +364,68 @@
   }
 
   /* Ratings style */
-  .rating-container {
-    margin: 1.5rem 0;
-  }
+.rating-container {
+  margin: 1.5rem 0;
+}
 
-  .rating-input {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
+.rating-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+}
 
-  .rating-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+.rating-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0 0.5rem;
+}
 
-  .rating-input input[type="radio"] {
-    display: none;
-  }
+/* Hide the radio buttons */
+.rating-input input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
 
-  .rating-input label {
-    cursor: pointer;
-    font-size: 1.8rem;
-    color: #dddddd;
-    transition: color 0.2s ease;
-    margin: 0 0.1rem;
-  }
+/* Star styling */
+.rating-input label {
+  cursor: pointer;
+  font-size: 2rem;
+  color: #dddddd;
+  transition: color 0.2s ease;
+}
 
-  .rating-input label:hover,
-  .rating-input label:hover ~ label,
-  .rating-input input[type="radio"]:checked ~ label {
-    color: #ffc107;
-  }
+/* Hover effect - highlight stars from left to right */
+.rating-option:hover label,
+.rating-option:hover ~ .rating-option label {
+  color: #ffc107;
+}
 
-  .rating-text {
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-    color: #666;
-  }
+/* Selected state - important to make it stay highlighted */
+.rating-input input[type="radio"]:checked + label {
+  color: #ffc107;
+}
+
+/* Fix to ensure stars to the left of the selected one stay highlighted */
+.rating-input input[type="radio"]:checked + label ~ label {
+  color: #ffc107;
+}
+
+.rating-text {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  color: #666;
+}
+
+/* Add focus styles for accessibility */
+.rating-input input[type="radio"]:focus + label {
+  outline: 2px solid #007bff;
+  border-radius: 4px;
+}
 
   /* Comment style */
   .btn-group-sm .btn {
