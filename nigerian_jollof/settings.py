@@ -85,7 +85,7 @@ LOGIN_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Database configuration with default as sqlite
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,15 +93,10 @@ DATABASES = {
     }
 }
 
-# If DATABASE_URL environment variable exists, configure PostgreSQL
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
-else:
-    # Manual configuration for your Neon PostgreSQL database
-    DATABASES['default'] = dj_database_url.parse(
-        'postgresql://neondb_owner:npg_s3f4iyZhFjTz@ep-sparkling-math-a22t4raq.eu-central-1.aws.neon.tech/froth_coma_sushi_834835'
-    )
+# Only use PostgreSQL if DATABASE_URL is provided by Heroku
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
