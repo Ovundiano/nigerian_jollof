@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Recipe, Comment, Rating
 from .forms import RecipeForm, CommentForm, RatingForm, UserRegistrationForm
 from django.core.files.uploadedfile import SimpleUploadedFile
+from .models import Category
 
 
 class HomePageTests(TestCase):
