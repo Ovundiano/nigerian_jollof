@@ -1,4 +1,10 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -10,102 +16,106 @@ from django.http import HttpResponseForbidden
 
 
 def home(request):
-    featured_recipes = Recipe.objects.all().order_by('-created_at')[:3]
-    return render(request, 'recipes/home.html', {'featured_recipes': featured_recipes})
+    featured_recipes = Recipe.objects.all().order_by("-created_at")[:3]
+    return render(request, "recipes/home.html", {"featured_recipes": featured_recipes})
 
 
 class RecipeListView(ListView):
     model = Recipe
-    template_name = 'recipes/database_recipes.html'  # Use the new template
-    context_object_name = 'recipes'
-    ordering = ['-created_at']
+    template_name = "recipes/database_recipes.html"  # Use the new template
+    context_object_name = "recipes"
+    ordering = ["-created_at"]
     paginate_by = 6
 
 
 def jollof_varieties(request):
-    return render(request, 'recipes/recipe_list.html')
+    return render(request, "recipes/recipe_list.html")
 
 
 class RecipeDetailView(DetailView):
     model = Recipe
-    template_name = 'recipes/recipe_detail.html'
+    template_name = "recipes/recipe_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         # Initialize forms
-        context['comment_form'] = CommentForm()
-        context['rating_form'] = RatingForm()
+        context["comment_form"] = CommentForm()
+        context["rating_form"] = RatingForm()
 
         # Get existing rating for the user if logged in
         if self.request.user.is_authenticated:
             existing_rating = Rating.objects.filter(
-                recipe=self.object,
-                user=self.request.user
+                recipe=self.object, user=self.request.user
             ).first()
             if existing_rating:
-                context['rating_form'] = RatingForm(initial={'value': existing_rating.value})
+                context["rating_form"] = RatingForm(
+                    initial={"value": existing_rating.value}
+                )
                 # Set the initial value to pre-select the radio button
-                context['user_rating'] = existing_rating.value
+                context["user_rating"] = existing_rating.value
 
         # Get comments ordered by most recent
-        context['comments'] = self.object.comment_set.all().order_by('-created_at')
+        context["comments"] = self.object.comment_set.all().order_by("-created_at")
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
         if not request.user.is_authenticated:
-            messages.error(request, 'Please log in to comment or rate.')
-            return redirect('login')
+            messages.error(request, "Please log in to comment or rate.")
+            return redirect("login")
 
         # Handle form submission based on the form_type hidden field
-        form_type = request.POST.get('form_type', '')
+        form_type = request.POST.get("form_type", "")
 
         # Handle rating submission
-        if form_type == 'rating_form' and 'value' in request.POST:
-            rating_value = request.POST.get('value')
+        if form_type == "rating_form" and "value" in request.POST:
+            rating_value = request.POST.get("value")
             try:
                 rating_value = int(rating_value)
                 if 1 <= rating_value <= 5:  # Validate rating range
                     rating, created = Rating.objects.get_or_create(
                         recipe=self.object,
                         user=request.user,
-                        defaults={'value': rating_value}
+                        defaults={"value": rating_value},
                     )
                     if not created:
                         rating.value = rating_value
                         rating.save()
-                    messages.success(request, 'Rating updated successfully!')
+                    messages.success(request, "Rating updated successfully!")
                 else:
-                    messages.error(request, 'Invalid rating value. Please select between 1 and 5 stars.')
+                    messages.error(
+                        request,
+                        "Invalid rating value. Please select between 1 and 5 stars.",
+                    )
             except ValueError:
-                messages.error(request, 'Invalid rating value.')
+                messages.error(request, "Invalid rating value.")
 
         # Handle comment submission (no form_type or content check)
-        elif 'content' in request.POST:
+        elif "content" in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.recipe = self.object
                 comment.user = request.user
                 comment.save()
-                messages.success(request, 'Comment added successfully!')
+                messages.success(request, "Comment added successfully!")
             else:
-                messages.error(request, 'Error adding comment. Please try again.')
+                messages.error(request, "Error adding comment. Please try again.")
 
-        return redirect('recipes:recipe_detail', pk=self.object.pk)
+        return redirect("recipes:recipe_detail", pk=self.object.pk)
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
-    template_name = 'recipes/recipe_form.html'
-    success_url = reverse_lazy('recipes:recipe_list')
+    template_name = "recipes/recipe_form.html"
+    success_url = reverse_lazy("recipes:recipe_list")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(self.request, 'Recipe created successfully!')
+        messages.success(self.request, "Recipe created successfully!")
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
@@ -113,219 +123,223 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             return self.form_valid(form)
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, "Please correct the errors below.")
             return self.form_invalid(form)
 
 
 @login_required
 def add_comment(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.recipe = recipe
             comment.user = request.user
             comment.save()
-            messages.success(request, 'Comment added successfully!')
-    return redirect('recipes:recipe_detail', pk=pk)
+            messages.success(request, "Comment added successfully!")
+    return redirect("recipes:recipe_detail", pk=pk)
 
 
 @login_required
 def add_rating(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
-    if request.method == 'POST':
-        rating_value = request.POST.get('value')
+    if request.method == "POST":
+        rating_value = request.POST.get("value")
         try:
             rating_value = int(rating_value)
             if 1 <= rating_value <= 5:  # Validate rating range
                 rating, created = Rating.objects.get_or_create(
-                    recipe=recipe,
-                    user=request.user,
-                    defaults={'value': rating_value}
+                    recipe=recipe, user=request.user, defaults={"value": rating_value}
                 )
                 if not created:
                     rating.value = rating_value
                     rating.save()
-                messages.success(request, 'Rating added successfully!')
+                messages.success(request, "Rating added successfully!")
             else:
-                messages.error(request, 'Invalid rating value. Please select between 1 and 5 stars.')
+                messages.error(
+                    request,
+                    "Invalid rating value. Please select between 1 and 5 stars.",
+                )
         except ValueError:
-            messages.error(request, 'Invalid rating value.')
-    return redirect('recipes:recipe_detail', pk=pk)
+            messages.error(request, "Invalid rating value.")
+    return redirect("recipes:recipe_detail", pk=pk)
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Account created successfully! You can now login.')
-            return redirect('login')
+            messages.success(
+                request, "Account created successfully! You can now login."
+            )
+            return redirect("login")
     else:
         form = UserRegistrationForm()
-    return render(request, 'recipes/register.html', {'form': form})
+    return render(request, "recipes/register.html", {"form": form})
 
 
 def about(request):
-    return render(request, 'recipes/about.html')
+    return render(request, "recipes/about.html")
 
 
 def jollof_varieties(request):
-    return render(request, 'recipes/recipe_list.html')
+    return render(request, "recipes/recipe_list.html")
 
 
 def variety_detail(request, variety):
     varieties_info = {
-        'smoky': {
-            'title': 'Smoky Jollof',
-            'description': 'The signature smoky flavor that Nigerian Jollof is famous for.',
-            'cooking_time': '1 hour 30 minutes',
-            'difficulty': 'Medium',
-            'ingredients': [
-                '2 cups long-grain rice',
-                '4 large tomatoes',
-                '2 red bell peppers',
-                '2 scotch bonnet peppers',
-                'Vegetable oil',
-                'Seasonings and spices'
+        "smoky": {
+            "title": "Smoky Jollof",
+            "description": "The signature smoky flavor that Nigerian Jollof is famous for.",
+            "cooking_time": "1 hour 30 minutes",
+            "difficulty": "Medium",
+            "ingredients": [
+                "2 cups long-grain rice",
+                "4 large tomatoes",
+                "2 red bell peppers",
+                "2 scotch bonnet peppers",
+                "Vegetable oil",
+                "Seasonings and spices",
             ],
-            'instructions': [
-                'Blend tomatoes, peppers, and onions',
-                'Parboil rice and rinse',
-                'Cook tomato sauce until reduced',
-                'Combine rice and sauce',
-                'Cook on low heat for smoky flavor'
-            ]
+            "instructions": [
+                "Blend tomatoes, peppers, and onions",
+                "Parboil rice and rinse",
+                "Cook tomato sauce until reduced",
+                "Combine rice and sauce",
+                "Cook on low heat for smoky flavor",
+            ],
         },
-        'firewood': {
-            'title': 'Firewood Jollof',
-            'description': 'Traditional firewood-cooked Jollof with authentic woody aroma.',
-            'cooking_time': '2 hours',
-            'difficulty': 'Hard',
-            'ingredients': [
-                '3 cups long-grain rice',
-                '6 large tomatoes',
-                '3 red bell peppers',
-                '3 scotch bonnet peppers',
-                'Palm oil',
-                'Traditional seasonings'
+        "firewood": {
+            "title": "Firewood Jollof",
+            "description": "Traditional firewood-cooked Jollof with authentic woody aroma.",
+            "cooking_time": "2 hours",
+            "difficulty": "Hard",
+            "ingredients": [
+                "3 cups long-grain rice",
+                "6 large tomatoes",
+                "3 red bell peppers",
+                "3 scotch bonnet peppers",
+                "Palm oil",
+                "Traditional seasonings",
             ],
-            'instructions': [
-                'Prepare firewood or charcoal',
-                'Blend ingredients for sauce',
-                'Cook sauce in cast iron pot',
-                'Add rice and cook slowly',
-                'Allow smoke to infuse flavor'
-            ]
+            "instructions": [
+                "Prepare firewood or charcoal",
+                "Blend ingredients for sauce",
+                "Cook sauce in cast iron pot",
+                "Add rice and cook slowly",
+                "Allow smoke to infuse flavor",
+            ],
         },
-        'party': {
-            'title': 'Party Jollof',
-            'description': 'The celebratory version served at Nigerian parties and gatherings.',
-            'cooking_time': '2 hours 30 minutes',
-            'difficulty': 'Medium',
-            'ingredients': [
-                '5 cups long-grain rice',
-                '8 large tomatoes',
-                '4 red bell peppers',
-                '3-4 scotch bonnet peppers',
-                'Vegetable oil',
-                'Chicken stock',
-                'Bay leaves',
-                'Thyme, curry powder, and other seasonings'
+        "party": {
+            "title": "Party Jollof",
+            "description": "The celebratory version served at Nigerian parties and gatherings.",
+            "cooking_time": "2 hours 30 minutes",
+            "difficulty": "Medium",
+            "ingredients": [
+                "5 cups long-grain rice",
+                "8 large tomatoes",
+                "4 red bell peppers",
+                "3-4 scotch bonnet peppers",
+                "Vegetable oil",
+                "Chicken stock",
+                "Bay leaves",
+                "Thyme, curry powder, and other seasonings",
             ],
-            'instructions': [
-                'Prepare large pot or dutch oven',
-                'Blend tomatoes, peppers, and onions',
-                'Fry blended mixture until reduced by half',
-                'Parboil rice and rinse thoroughly',
-                'Layer seasoned sauce and rice',
-                'Cover tightly and cook on low heat',
-                'Let rest before serving to large crowd'
-            ]
+            "instructions": [
+                "Prepare large pot or dutch oven",
+                "Blend tomatoes, peppers, and onions",
+                "Fry blended mixture until reduced by half",
+                "Parboil rice and rinse thoroughly",
+                "Layer seasoned sauce and rice",
+                "Cover tightly and cook on low heat",
+                "Let rest before serving to large crowd",
+            ],
         },
-        'native': {
-            'title': 'Native Jollof',
-            'description': 'Traditional village-style preparation with local ingredients.',
-            'cooking_time': '2 hours',
-            'difficulty': 'Medium-Hard',
-            'ingredients': [
-                '3 cups local rice (not parboiled)',
-                'Fresh tomatoes and peppers',
-                'Palm oil',
-                'Locust beans (iru)',
-                'Smoked fish or dried crayfish',
-                'Native spices and herbs'
+        "native": {
+            "title": "Native Jollof",
+            "description": "Traditional village-style preparation with local ingredients.",
+            "cooking_time": "2 hours",
+            "difficulty": "Medium-Hard",
+            "ingredients": [
+                "3 cups local rice (not parboiled)",
+                "Fresh tomatoes and peppers",
+                "Palm oil",
+                "Locust beans (iru)",
+                "Smoked fish or dried crayfish",
+                "Native spices and herbs",
             ],
-            'instructions': [
-                'Prepare traditional clay pot if available',
-                'Pound or grind fresh tomatoes and peppers',
-                'Heat palm oil in pot until clear',
-                'Add blended mixture and cook until raw smell disappears',
-                'Add cleaned rice without parboiling',
-                'Add traditional seasonings and smoked ingredients',
-                'Cook on wood fire if possible for authentic taste'
-            ]
+            "instructions": [
+                "Prepare traditional clay pot if available",
+                "Pound or grind fresh tomatoes and peppers",
+                "Heat palm oil in pot until clear",
+                "Add blended mixture and cook until raw smell disappears",
+                "Add cleaned rice without parboiling",
+                "Add traditional seasonings and smoked ingredients",
+                "Cook on wood fire if possible for authentic taste",
+            ],
         },
-        'quick': {
-            'title': 'Quick Jollof',
-            'description': 'A faster preparation that maintains authentic flavor.',
-            'cooking_time': '45 minutes',
-            'difficulty': 'Easy',
-            'ingredients': [
-                '2 cups parboiled rice',
-                '1 can tomato paste',
-                '1 onion, chopped',
-                '1 bell pepper, chopped',
-                '1-2 scotch bonnet peppers (to taste)',
-                'Vegetable oil',
-                'Stock cube and seasonings'
+        "quick": {
+            "title": "Quick Jollof",
+            "description": "A faster preparation that maintains authentic flavor.",
+            "cooking_time": "45 minutes",
+            "difficulty": "Easy",
+            "ingredients": [
+                "2 cups parboiled rice",
+                "1 can tomato paste",
+                "1 onion, chopped",
+                "1 bell pepper, chopped",
+                "1-2 scotch bonnet peppers (to taste)",
+                "Vegetable oil",
+                "Stock cube and seasonings",
             ],
-            'instructions': [
-                'Heat oil and sauté onions',
-                'Add tomato paste and fry for 2-3 minutes',
-                'Add chopped peppers and seasonings',
-                'Pour in 2.5 cups of water or stock',
-                'Add rice and stir well',
-                'Cover and cook on medium-low heat for 25-30 minutes',
-                'Let rest for 5 minutes before serving'
-            ]
+            "instructions": [
+                "Heat oil and sauté onions",
+                "Add tomato paste and fry for 2-3 minutes",
+                "Add chopped peppers and seasonings",
+                "Pour in 2.5 cups of water or stock",
+                "Add rice and stir well",
+                "Cover and cook on medium-low heat for 25-30 minutes",
+                "Let rest for 5 minutes before serving",
+            ],
         },
-        'coconut': {
-            'title': 'Coconut Jollof',
-            'description': 'A coastal twist with coconut milk adding richness and depth.',
-            'cooking_time': '1 hour 15 minutes',
-            'difficulty': 'Medium',
-            'ingredients': [
-                '2 cups long-grain rice',
-                '1 can coconut milk',
-                '3 large tomatoes',
-                '2 red bell peppers',
-                '1-2 scotch bonnet peppers',
-                'Coconut oil',
-                'Fresh thyme and bay leaves',
-                'Stock cube and seasonings'
+        "coconut": {
+            "title": "Coconut Jollof",
+            "description": "A coastal twist with coconut milk adding richness and depth.",
+            "cooking_time": "1 hour 15 minutes",
+            "difficulty": "Medium",
+            "ingredients": [
+                "2 cups long-grain rice",
+                "1 can coconut milk",
+                "3 large tomatoes",
+                "2 red bell peppers",
+                "1-2 scotch bonnet peppers",
+                "Coconut oil",
+                "Fresh thyme and bay leaves",
+                "Stock cube and seasonings",
             ],
-            'instructions': [
-                'Blend tomatoes, peppers, and onions',
-                'Heat coconut oil and fry blended mixture',
-                'Add coconut milk and bring to simmer',
-                'Add washed rice and additional water if needed',
-                'Add herbs and seasonings',
-                'Cover and cook on low heat until rice is tender',
-                'Garnish with fresh herbs or toasted coconut flakes'
-            ]
-        }
+            "instructions": [
+                "Blend tomatoes, peppers, and onions",
+                "Heat coconut oil and fry blended mixture",
+                "Add coconut milk and bring to simmer",
+                "Add washed rice and additional water if needed",
+                "Add herbs and seasonings",
+                "Cover and cook on low heat until rice is tender",
+                "Garnish with fresh herbs or toasted coconut flakes",
+            ],
+        },
     }
 
     variety_data = varieties_info.get(variety)
     if not variety_data:
-        return redirect('recipes:jollof_varieties')
+        return redirect("recipes:jollof_varieties")
 
-    return render(request, 'recipes/variety_detail.html', {
-        'variety': variety,
-        'recipe': variety_data
-    })
+    return render(
+        request,
+        "recipes/variety_detail.html",
+        {"variety": variety, "recipe": variety_data},
+    )
 
 
 @login_required
@@ -336,19 +350,18 @@ def edit_comment(request, comment_id):
     if comment.user != request.user:
         return HttpResponseForbidden("You cannot edit this comment.")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Comment updated successfully!')
-            return redirect('recipes:recipe_detail', pk=comment.recipe.pk)
+            messages.success(request, "Comment updated successfully!")
+            return redirect("recipes:recipe_detail", pk=comment.recipe.pk)
     else:
         form = CommentForm(instance=comment)
 
-    return render(request, 'recipes/edit_comment.html', {
-        'form': form,
-        'comment': comment
-    })
+    return render(
+        request, "recipes/edit_comment.html", {"form": form, "comment": comment}
+    )
 
 
 @login_required
@@ -360,24 +373,22 @@ def delete_comment(request, comment_id):
         return HttpResponseForbidden("You cannot delete this comment.")
 
     recipe_id = comment.recipe.id
-    if request.method == 'POST':
+    if request.method == "POST":
         comment.delete()
-        messages.success(request, 'Comment deleted successfully!')
-        return redirect('recipes:recipe_detail', pk=recipe_id)
+        messages.success(request, "Comment deleted successfully!")
+        return redirect("recipes:recipe_detail", pk=recipe_id)
 
-    return render(request, 'recipes/delete_comment_confirm.html', {
-        'comment': comment
-    })
+    return render(request, "recipes/delete_comment_confirm.html", {"comment": comment})
 
 
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
-    template_name = 'recipes/recipe_edit.html'
+    template_name = "recipes/recipe_edit.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(self.request, 'Recipe updated successfully!')
+        messages.success(self.request, "Recipe updated successfully!")
         return super().form_valid(form)
 
     def test_func(self):
@@ -385,18 +396,18 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == recipe.author
 
     def get_success_url(self):
-        return reverse_lazy('recipes:recipe_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("recipes:recipe_detail", kwargs={"pk": self.object.pk})
 
 
 class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
-    success_url = reverse_lazy('recipes:recipe_list')
-    template_name = 'recipes/recipe_confirm_delete.html'
+    success_url = reverse_lazy("recipes:recipe_list")
+    template_name = "recipes/recipe_confirm_delete.html"
 
     def test_func(self):
         recipe = self.get_object()
         return self.request.user == recipe.author
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Recipe deleted successfully!')
+        messages.success(self.request, "Recipe deleted successfully!")
         return super().delete(request, *args, **kwargs)

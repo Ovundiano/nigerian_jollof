@@ -20,7 +20,8 @@ class Recipe(models.Model):
     instructions = models.TextField()
     cooking_time = models.IntegerField(help_text="Cooking time in minutes")
     servings = models.IntegerField()
-    image = models.ImageField(upload_to='recipes/', blank=True, null=True)
+    difficulty = models.CharField(max_length=50, default="medium")
+    image = models.ImageField(upload_to="recipes/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
@@ -37,16 +38,20 @@ class Recipe(models.Model):
 
 
 class Rating(models.Model):
-    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='ratings')
+    recipe = models.ForeignKey(
+        "Recipe", on_delete=models.CASCADE, related_name="ratings"
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 rating
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('recipe', 'user')  # One rating per user per recipe
+        unique_together = ("recipe", "user")  # One rating per user per recipe
 
     def __str__(self):
-        return f"{self.user.username}'s {self.value}-star rating for {self.recipe.title}"
+        return (
+            f"{self.user.username}'s {self.value}-star rating for {self.recipe.title}"
+        )
 
 
 class Comment(models.Model):
@@ -56,4 +61,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Comment by {self.user.username} on {self.recipe.title}'
+        return f"Comment by {self.user.username} on {self.recipe.title}"
