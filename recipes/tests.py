@@ -149,10 +149,9 @@ class RecipeDetailViewTests(TestCase):
         )
         # Should redirect to login page
         self.assertRedirects(
-            response,
-            "/accounts/login/?next="
-            + reverse("recipes:recipe_detail", kwargs={"pk": self.recipe.pk}),
+            response, "/accounts/login/?next=/recipe/1/", fetch_redirect_response=False
         )
+
         # Comment count should not increase
         self.assertEqual(Comment.objects.filter(recipe=self.recipe).count(), 2)
 

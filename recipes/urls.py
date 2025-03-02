@@ -26,8 +26,6 @@ urlpatterns = [
         views.RecipeDeleteView.as_view(),
         name="recipe_delete",
     ),
-    path(
-        "recipe/<int:pk>/comment/", views.AddCommentView.as_view(), name="add_comment"
-    ),
-    path("recipe/<int:pk>/rating/", views.AddRatingView.as_view(), name="add_rating"),
+    path("recipe/<int:pk>/comment/", views.add_comment, name="add_comment"),
+    path("recipe/<int:pk>/rating/", views.add_rating, name="add_rating"),
 ]

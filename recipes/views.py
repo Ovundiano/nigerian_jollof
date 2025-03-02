@@ -126,6 +126,13 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
             messages.error(request, "Please correct the errors below.")
             return self.form_invalid(form)
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateView, self).get_context_data(**kwargs)
+        return context
+
 
 @login_required
 def add_comment(request, pk):
