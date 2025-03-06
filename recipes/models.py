@@ -21,7 +21,7 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField(help_text="Cooking time in minutes")
     servings = models.IntegerField()
     difficulty = models.CharField(max_length=50, default="medium")
-    image = models.ImageField(upload_to="recipes/", blank=True, null=True)
+    image = models.ImageField(upload_to="recipes/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)

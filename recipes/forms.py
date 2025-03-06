@@ -22,7 +22,6 @@ class RecipeForm(forms.ModelForm):
             "instructions",
             "cooking_time",
             "servings",
-            "difficulty",
             "image",
             "category",
         ]
@@ -36,6 +35,8 @@ class RecipeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["category"].queryset = Category.objects.all()
         self.fields["category"].empty_label = "Select a category"
+        # Make image optional for now to help with debugging
+        self.fields["image"].required = False
 
 
 class CommentForm(forms.ModelForm):

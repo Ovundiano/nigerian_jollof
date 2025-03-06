@@ -22,7 +22,7 @@ def home(request):
 
 class RecipeListView(ListView):
     model = Recipe
-    template_name = "recipes/database_recipes.html"  # Use the new template
+    template_name = "recipes/database_recipes.html"
     context_object_name = "recipes"
     ordering = ["-created_at"]
     paginate_by = 6
@@ -113,25 +113,38 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
     template_name = "recipes/recipe_form.html"
     success_url = reverse_lazy("recipes:recipe_list")
 
+    def get_context_data(self, **kwargs):
+        """
+        Override get_context_data to explicitly handle the case where
+        self.object might not exist yet
+        """
+        if not hasattr(self, "object"):
+            self.object = None
+        context = super().get_context_data(**kwargs)
+        return context
+
     def form_valid(self, form):
         form.instance.author = self.request.user
+        # Use default difficulty value from model
+        form.instance.difficulty = "medium"  # This is redundant but makes it explicit
+        if self.request.FILES.get("image"):
+            form.instance.image = self.request.FILES["image"]
+        response = super().form_valid(form)
         messages.success(self.request, "Recipe created successfully!")
-        return super().form_valid(form)
+        return response
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
         if form.is_valid():
+            # Debug successful form submission
+            print("Form is valid! Saving recipe...")
             return self.form_valid(form)
         else:
+            # Debug form errors
+            print(f"Form validation failed with errors: {form.errors}")
             messages.error(request, "Please correct the errors below.")
             return self.form_invalid(form)
-
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateView, self).get_context_data(**kwargs)
-        return context
 
 
 @login_required
@@ -395,6 +408,9 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        # Handle image upload for updates
+        if self.request.FILES.get("image"):
+            form.instance.image = self.request.FILES["image"]
         messages.success(self.request, "Recipe updated successfully!")
         return super().form_valid(form)
 
