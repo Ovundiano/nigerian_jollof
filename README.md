@@ -148,7 +148,7 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
    python manage.py makemigrations
    python manage.py migrate
    ```
-   
+
    ### Running the Application
    Start the development server by ```python manage.py runserver```
 
@@ -266,6 +266,7 @@ These are the list of technologies I used while building this site:
 - [TechSini](https://techsini.com/multi-mockup/) To create mockup image.
 - [FontAwesome](https://fontawesome.com/) Icons.
 - [Goggle Fonts](https://fonts.google.com/) For website fonts.
+- [Goggle](https://www.google.com/) For website images.
 
 ## Testing
 
