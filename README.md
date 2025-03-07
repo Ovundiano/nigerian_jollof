@@ -124,13 +124,13 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
    `````
 
    ### Environment Setup
-    I had to Create a virtual environment and activate it
-    ```
-     python -m venv venv
-     source venv/bin/activate
-    ```
+   I had to Create a virtual environment and activate it
+   ```
+    python -m venv venv
+    source venv/bin/activate
+   ```
 
-    I had to install dependencies, during the cause of creating this site 
+   I had to install dependencies, during the cause of creating this site 
    ```pip3 install -r requirements.txt```
 
    Furthermore I had to create an env.py file and configure environment variables directly:
@@ -138,7 +138,8 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
    import os
    os.environ["SECRET_KEY"] = "my-secret-key"
    os.environ["DEBUG"] = "True"  # Set to "False" 
-   os.environ["DATABASE_URL"] = "my-database-url"  
+   os.environ["DATABASE_URL"] = "my-database-url"
+   ```
 
    ### Database Configuration
    By default, the system supports both PostgreSQL (preferred for production) and SQLite (default fallback).
@@ -147,6 +148,7 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
    python manage.py makemigrations
    python manage.py migrate
    ```
+   
    ### Running the Application
    Start the development server by ```python manage.py runserver```
 
