@@ -1,5 +1,5 @@
 ---
-name: User Story
+name: User Story:
 about: Browse Recipes
 title: 'User Story: Browse Recipes #1'
 labels: ''
