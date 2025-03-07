@@ -69,6 +69,12 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="{{ form.difficulty.id_for_label }}" class="form-label">Difficulty</label>
+                        {{ form.difficulty|add_class:"form-control" }}
+                        {{ form.difficulty.errors }}
+                    </div>
+
+                    <div class="mb-3">
                         <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
                         {{ form.image|add_class:"form-control" }}
                         {{ form.image.errors }}

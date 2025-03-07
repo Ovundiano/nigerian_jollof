@@ -22,6 +22,7 @@ class RecipeForm(forms.ModelForm):
             "instructions",
             "cooking_time",
             "servings",
+            "difficulty",
             "image",
             "category",
         ]

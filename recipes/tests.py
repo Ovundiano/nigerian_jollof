@@ -97,6 +97,7 @@ class RecipeDetailViewTests(TestCase):
             difficulty="Easy",
             author=self.user,
         )
+        self.url = reverse("recipes:recipe_detail", kwargs={"pk": self.recipe.pk})
 
         # Create some comments for the recipe
         Comment.objects.create(
@@ -147,9 +148,11 @@ class RecipeDetailViewTests(TestCase):
             {"form_type": "comment_form", "content": "New Test Comment"},
             follow=True,
         )
-        # Should redirect to login page
+
+        # Get the actual redirect URL from the response instead of hardcoding it
+        expected_redirect_url = f'/accounts/login/?next={reverse("recipes:recipe_detail", kwargs={"pk": self.recipe.pk})}'
         self.assertRedirects(
-            response, "/accounts/login/?next=/recipe/1/", fetch_redirect_response=False
+            response, expected_redirect_url, fetch_redirect_response=False
         )
 
         # Comment count should not increase
@@ -209,21 +212,33 @@ class RecipeCreateViewTests(TestCase):
 
     def test_recipe_create_post(self):
         self.client.login(username="testuser", password="testpassword123")
-        # Create a test recipe post data
+
+        # Create a test category first (if required)
+        category = Category.objects.create(
+            name="Test Category", description="Test Description"
+        )
+
+        # Create a test recipe post data with lowercase difficulty
         recipe_data = {
             "title": "New Test Recipe",
             "description": "New Test Description",
             "ingredients": "New Test Ingredients",
             "instructions": "New Test Instructions",
             "cooking_time": 45,
-            "servings": 6,  # Added servings field
-            "difficulty": "Medium",
+            "servings": 6,
+            "difficulty": "medium",
+            "category": category.id,
         }
 
         response = self.client.post(
             reverse("recipes:recipe_create"), recipe_data, follow=True
         )
         self.assertEqual(response.status_code, 200)
+
+        # Print the response for debugging if needed
+        print(f"Response content: {response.content.decode()[:500]}")
+        print(f"Recipe count: {Recipe.objects.count()}")
+
         self.assertEqual(Recipe.objects.count(), 1)
         new_recipe = Recipe.objects.first()
         self.assertEqual(new_recipe.title, "New Test Recipe")
@@ -286,7 +301,14 @@ class RecipeUpdateViewTests(TestCase):
 
     def test_recipe_update_post(self):
         self.client.login(username="testuser", password="testpassword123")
-        # Update recipe data
+
+        # Make sure the category is created and available
+        if not hasattr(self, "category"):
+            self.category = Category.objects.create(
+                name="Test Category", description="Test Category Description"
+            )
+
+        # Update recipe data with lowercase difficulty
         updated_recipe_data = {
             "title": "Updated Test Recipe",
             "description": "Updated Test Description",
@@ -294,12 +316,13 @@ class RecipeUpdateViewTests(TestCase):
             "instructions": "Updated Test Instructions",
             "cooking_time": 60,
             "servings": 8,
-            "difficulty": "Hard",
+            "difficulty": "hard",  # Changed to lowercase to match model
             "category": self.category.id,
         }
 
         # Print the original recipe data for debugging
         print(f"Original title: {self.recipe.title}")
+        print(f"Original difficulty: {self.recipe.difficulty}")
 
         response = self.client.post(
             reverse("recipes:recipe_update", kwargs={"pk": self.recipe.pk}),
@@ -307,20 +330,20 @@ class RecipeUpdateViewTests(TestCase):
             follow=True,
         )
 
-        # Print the response for debugging
+        # Print the response and form data for debugging
         print(f"Response status: {response.status_code}")
-        print(
-            f"Response content: {response.content.decode()[:500]}..."
-        )  # first 500 chars
+        print(f"Response content: {response.content.decode()[:500]}")
         print(f"Response redirect chain: {response.redirect_chain}")
+        print(f"Form data: {updated_recipe_data}")
 
         # Refresh recipe from db
         self.recipe.refresh_from_db()
         print(f"Updated title: {self.recipe.title}")
+        print(f"Updated difficulty: {self.recipe.difficulty}")
 
         self.assertEqual(self.recipe.title, "Updated Test Recipe")
         self.assertEqual(self.recipe.cooking_time, 60)
-        self.assertEqual(self.recipe.difficulty, "Hard")
+        self.assertEqual(self.recipe.difficulty, "hard")
 
 
 class RecipeDeleteViewTests(TestCase):

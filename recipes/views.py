@@ -13,6 +13,7 @@ from django.contrib import messages
 from .models import Recipe, Comment, Rating
 from .forms import RecipeForm, CommentForm, RatingForm, UserRegistrationForm
 from django.http import HttpResponseForbidden
+from django.urls import reverse
 
 
 def home(request):
@@ -35,6 +36,7 @@ def jollof_varieties(request):
 class RecipeDetailView(DetailView):
     model = Recipe
     template_name = "recipes/recipe_detail.html"
+    context_object_name = "recipe"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,6 +44,9 @@ class RecipeDetailView(DetailView):
         # Initialize forms
         context["comment_form"] = CommentForm()
         context["rating_form"] = RatingForm()
+
+        # Get comments ordered by most recent - for all users
+        context["comments"] = self.object.comment_set.all().order_by("-created_at")
 
         # Get existing rating for the user if logged in
         if self.request.user.is_authenticated:
@@ -55,16 +60,17 @@ class RecipeDetailView(DetailView):
                 # Set the initial value to pre-select the radio button
                 context["user_rating"] = existing_rating.value
 
-        # Get comments ordered by most recent
-        context["comments"] = self.object.comment_set.all().order_by("-created_at")
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
         if not request.user.is_authenticated:
+            # Store the next parameter correctly
+            next_url = reverse("recipes:recipe_detail", kwargs={"pk": self.object.pk})
+            login_url = f"{reverse('login')}?next={next_url}"
             messages.error(request, "Please log in to comment or rate.")
-            return redirect("login")
+            return redirect(login_url)
 
         # Handle form submission based on the form_type hidden field
         form_type = request.POST.get("form_type", "")
@@ -114,10 +120,6 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("recipes:recipe_list")
 
     def get_context_data(self, **kwargs):
-        """
-        Override get_context_data to explicitly handle the case where
-        self.object might not exist yet
-        """
         if not hasattr(self, "object"):
             self.object = None
         context = super().get_context_data(**kwargs)
@@ -125,8 +127,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        # Use default difficulty value from model
-        form.instance.difficulty = "medium"  # This is redundant but makes it explicit
+        # Don't override the difficulty field if it's in the form
         if self.request.FILES.get("image"):
             form.instance.image = self.request.FILES["image"]
         response = super().form_valid(form)
@@ -137,11 +138,10 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         self.object = None
         form = self.get_form()
         if form.is_valid():
-            # Debug successful form submission
             print("Form is valid! Saving recipe...")
+            print(f"Form data: {form.cleaned_data}")  # Add this for debugging
             return self.form_valid(form)
         else:
-            # Debug form errors
             print(f"Form validation failed with errors: {form.errors}")
             messages.error(request, "Please correct the errors below.")
             return self.form_invalid(form)
@@ -408,11 +408,24 @@ class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        # Print form data for debugging
+        print(f"Update form data: {form.cleaned_data}")
+
         # Handle image upload for updates
         if self.request.FILES.get("image"):
             form.instance.image = self.request.FILES["image"]
         messages.success(self.request, "Recipe updated successfully!")
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            print(f"Update form is valid! Data: {form.cleaned_data}")
+            return self.form_valid(form)
+        else:
+            print(f"Update form errors: {form.errors}")
+            return self.form_invalid(form)
 
     def test_func(self):
         recipe = self.get_object()

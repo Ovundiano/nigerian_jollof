@@ -93,7 +93,7 @@ if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.parse(os.environ.get("DATABASE_URL"))
 
 if "test" in sys.argv:
-    DATABASES["default"]["ENGINE"] = "django.db.backends.sqlite3"
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
