@@ -5,4 +5,4 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
 
 
 
-![Nigeria Jollof Recipe Website](static\recipes\img\front-page.jpg)
+![Nigeria Jollof Recipe Website](static/recipes/img/front-page.jpg)
