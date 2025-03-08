@@ -118,3 +118,31 @@ The W3C Markup Validator and W3C CSS Validator Services were used to validate ev
 | Recipe.js |![screenshot](static/recipes/img/recipe.js.png) | Passed - No warnings. |
 
 ---
+
+## Python Testing
+
+### CI Python Linter
+
+  * All Python code in app.py was put though [CI Python Linter](https://pep8ci.herokuapp.com/)
+
+  | Test      | Screenshot                                                                                   | Notes                                                |
+|----------------------------|-----------------------------------------------------------------------------|------------------------------------------------------|
+| admin.py |![screenshot](static/recipes/img/admin.py.png) |  passed - No warnings|
+| apps.py |![screenshot](static/recipes/img/apps.py.png) |  Passed - No warnings  | 
+| convert.py |![screenshot](static/recipes/img/convert.py.png) |  passed - No warnings |
+| forms.py |![screenshot](static/recipes/img/forms.py.png) |  passed - No warnings |
+| main-urls.py |![screenshot](static/recipes/img/main-urls.py.png) |  passed - No warnings |
+| manage.py |![screenshot](static/recipes/img/manage.py.png) |  passed - No warnings |
+| models.py |![screenshot](static/recipes/img/models.py.png) |  passed - No warnings |
+| settings.py |![screenshot](static/recipes/img/settings.py.png)    |  Passed - No warnings     |
+| views.py |![screenshot](static/recipes/img/views.py.png)    |  Passed - No warnings   |
+
+---
+
+## Summary
+
+After initially correcting the code format and it passing testing using the CI python linter it seemed that the indentation after breaking a line due to line length wasnt quite aesthetically correct, although meeting pep8 guldlines. Most of the python files was reverted back to in vscode work environment after been verified by CI python linter, as this meant that  it doesn't affect the functionality of the site. As the criteria for this project is that python is to be pep8 compliant, using results and testing of the CI python linter was the most reliable approach.
+
+##### back to [top](#table-of-contents)
+
+---
