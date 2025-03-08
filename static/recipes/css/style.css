@@ -121,7 +121,7 @@
   }
   
   .social-links a:hover::after {
-    transform: scaleX(1);
+    transform: scale(1, 1);
   }
   
   .social-links a.facebook:hover { color: var(--facebook-color) !important; }

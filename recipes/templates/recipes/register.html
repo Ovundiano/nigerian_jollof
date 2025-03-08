@@ -18,7 +18,7 @@
                             {{ field.errors }}
                             {{ field }}
                             {% if field.help_text %}
-                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {{ field.help_text|safe }}
                             {% endif %}
                         </div>
                     {% endfor %}

@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 document.addEventListener('DOMContentLoaded', function() {
     // Add fade-in animation to elements with fade-in class
     const fadeElements = document.querySelectorAll('.fade-in');

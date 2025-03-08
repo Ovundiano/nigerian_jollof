@@ -74,3 +74,47 @@ The site was tested on the lighthouse facility in Google Developer Tools to asse
 | About Page |![screenshot](static/recipes/img/about-page-performance.png) |  Meets criteria |                        
 
 ---
+
+## Responsiveness & Compactability Testing
+
+To be cocksure a broad range of users can effectively use this website, I tested it across the 3 enshrined browsers in both mobile and desktop configuration.
+
+- Chrome Browser
+- Edge Browser
+- Mozilla Firefox Browser
+
+
+For testing compatibility, I made sure I generated the correct functionality and appearance across every breathe and length of devices, and website was tested to ensure the following browsers are performing adequately namely: Chrome, Firefox and Microsoft Edge.
+
+---
+
+## Code Validation
+
+The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project. The results and screenshots are in the table below.
+
+| Page                 | Screenshot Link                                                                   | Notes  |
+|----------------------|-----------------------------------------------------------------------------------|--------|
+|about.html|[view here](static/recipes/img/about.html.png) | Passed | 
+|add-recipe.html|[view here](static/recipes/img/add-recipe.html.png) | Passed |
+|all-recipes.html|[view here](static/recipes/img/all-recipes.html.png) | Passed |
+|home.html|[view here](static/recipes/img/home.html.png) | Passed | 
+|jollof-varieties|[view here](static/recipes/img/jollof-varieties.html.png) | Passed |
+|login.html|[view here](static/recipes/img/login.html.png) | Passed |
+|register.html|[view here](static/recipes/img/register.html.png) | Passed |
+|css|[view here](static/recipes/img/css-validator.png) | Passed |
+
+---
+
+## JavaScript Testing
+
+### JS Hint
+
+  * All JavaScript code was put though [JS Hint](https://jshint.com/) 
+
+| Test      | Screenshot                                              | Notes                                                   |
+|-----------|---------------------------------------------------------|---------------------------------------------------------|
+| Animation.js |![screenshot](static/recipes/img/animation.js.png) | Passed - No warnings. |
+| Main.js |![screenshot](static/recipes/img/main.js.png) | Passed - No warnings. |
+| Recipe.js |![screenshot](static/recipes/img/recipe.js.png) | Passed - No warnings. |
+
+---

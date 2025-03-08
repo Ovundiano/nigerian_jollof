@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize tooltips if using Bootstrap

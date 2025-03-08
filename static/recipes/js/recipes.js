@@ -1,3 +1,4 @@
+/* jshint esversion: 8 */
 // Recipe-specific JavaScript functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Original Recipe rating system for recipe cards
