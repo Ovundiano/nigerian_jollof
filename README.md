@@ -99,11 +99,10 @@ Here is the link to Nigerian Jollof Recipe Website-heroku where details on varie
    ![admin dashboard](static/recipes/img/admin-page.png)
 
 ## Wireframe
-  - Wireframes were created for mobile, tablet and desktop using wireframe.cc .
+  - Wireframes were created using wireframe.cc .
 
-![Wireframe Mobile]()
-![Wireframe home]()
-![Wireframe Mobile]() 
+![Wireframe 1](static/recipes/img/wireframe-1.jpg)
+![Wireframe 2](static/recipes/img/wireframe-2.jpg)
 
 ## Installation
 
@@ -259,6 +258,7 @@ These are the list of technologies I used while building this site:
 - [![GitHub](https://img.shields.io/badge/GitHub-grey?logo=github&logoColor=181717)](https://github.com) used for secure online code storage.
 - [![Heroku](https://img.shields.io/badge/Heroku-purple?logo=heroku&logoColor=A020F0)](https://www.heroku.com/) Used to deploy the project.
 - [![Code Institute](https://img.shields.io/badge/Code-Institute-orange?logo=code-institute&logoColor=orange)](https://codeinstitute.net/global/) Gitpod Template - to generate the workspace for the project.
+- [![Google Dev Tools](https://img.shields.io/badge/Google-yellow?logo=developer.chrome&logoColor=6C660F)](https://developer.chrome.com/docs/devtools) Dev Tools Used For page inspection and checking website.
 
 ### Technologies used to Design the website
 ***
